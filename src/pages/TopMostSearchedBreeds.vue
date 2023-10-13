@@ -30,7 +30,7 @@ export default {
             const data = await resp.json()
 
             const breeds = data.breeds
-            const allPromises = Promise.all(breeds.map((breed) => fetch(`http://127.0.0.1:8000/api/breed/${breed.api_id}`)))
+            const allPromises = Promise.all(breeds.map((breed) => fetch(`http://127.0.0.1:8000/api/breed/${breed.short_name}`)))
 
             const responses = await allPromises;
             const parsedResponses = await Promise.all(responses.map(async (response) => {
