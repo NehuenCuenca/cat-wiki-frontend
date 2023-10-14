@@ -17,33 +17,17 @@
             <span class="breeds-to-discover">
                 66+ Breeds For you to discover
             </span>
-            <RouterLink :to="{ name: 'TopMostSearchedBreeds'}">See more ➡</RouterLink>
+            <RouterLink :to="{ name: 'TopMostSearchedBreeds' }">See more ➡</RouterLink>
             <ul class="four-random-breeds">
-                <li class="random-breed">
+                <li class="random-breed" v-for="(rndBreed, indexRnd) in randomBreeds" :key="indexRnd">
                     <figure>
                         <div class="wrapper">
-                            <div class="first"></div>
-                            <img src="../assets/image 2.png" alt="" srcset="">
+                            <div class="first" v-if="indexRnd === 0"></div>
+                            <img :src="rndBreed.image.url" alt="image of {{rndBreed.name}}" srcset="">
                         </div>
-                        <figcaption>Random breed</figcaption>
-                    </figure>
-                </li>
-                <li class="random-breed">
-                    <figure>
-                        <img src="../assets/image 2.png" alt="" srcset="">
-                        <figcaption>Random breed</figcaption>
-                    </figure>
-                </li>
-                <li class="random-breed">
-                    <figure>
-                        <img src="../assets/image 2.png" alt="" srcset="">
-                        <figcaption>Random breed</figcaption>
-                    </figure>
-                </li>
-                <li class="random-breed">
-                    <figure>
-                        <img src="../assets/image 2.png" alt="" srcset="">
-                        <figcaption>Random breed</figcaption>
+                        <figcaption>
+                            <RouterLink :to="{ name: 'Breed', params: { breed_id: rndBreed.id } }">{{rndBreed.name}}</RouterLink>
+                        </figcaption>
                     </figure>
                 </li>
             </ul>
@@ -78,20 +62,29 @@ export default {
     setup() {
 
         const breeds = ref([]);
+        const randomBreeds = ref([]);
 
         onMounted(async() => {
             await getBreeds();
+            await getRandomBreeds();
         })
 
         const getBreeds = async () => { 
             const resp = await fetch('http://127.0.0.1:8000/api/breeds')   
             const data = await resp.json();
-            console.log(data);
+            
             breeds.value = [...data.breeds]
+        }
+        const getRandomBreeds = async () => { 
+            const resp = await fetch('http://127.0.0.1:8000/api/breeds/random/4')   
+            const data = await resp.json();
+
+            randomBreeds.value = [...data.breeds]
         }
 
         return {
-            breeds
+            breeds,
+            randomBreeds
         }
     }
 }
@@ -213,10 +206,12 @@ li.random-breed:first-child .wrapper {
 figure img {
     position: relative;
     width: 100%;
+    height: 220px;
+    object-fit: cover;
     border-radius: 24px;
 }
 
-figure figcaption {
+.random-breed figure figcaption > *{
     font: 600 1.125rem 'Montserrat', sans-serif;
     color: #291507;
 }

@@ -28,17 +28,9 @@ export default {
         const getMostPopularBreeds = async () => {
             const resp = await fetch(`http://127.0.0.1:8000/api/breeds/most-popular`)
             const data = await resp.json()
+            
+            popularBreeds.value = [ ...data.breeds ]
 
-            const breeds = data.breeds
-            const allPromises = Promise.all(breeds.map((breed) => fetch(`http://127.0.0.1:8000/api/breed/${breed.short_name}`)))
-
-            const responses = await allPromises;
-            const parsedResponses = await Promise.all(responses.map(async (response) => {
-                const data = await response.json();
-                return { info: data.breed, images: data.images };
-            }));
-
-            popularBreeds.value = [...parsedResponses]
         }
 
         onBeforeMount(async () => {

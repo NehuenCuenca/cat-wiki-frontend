@@ -1,8 +1,8 @@
 <template>
     <li class="breed-item" v-if="breed">
-        <img class="image-breed" :src="breed.images[0]" alt="">
-        <span class="name-breed">{{ position+1 }}. {{ breed.info.name }}</span>
-        <p class="description">{{ breed.info.description }}</p>
+        <img class="image-breed" :src="breed.image.url" alt="">
+        <span class="name-breed">{{ position+1 }}. {{ breed.name }}</span>
+        <p class="description">{{ breed.description }}</p>
     </li>
 </template>
 
